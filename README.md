@@ -22,14 +22,15 @@ Spring Boot ,
 MySQL
 
 
-## PostMan 
+## PostMan  :
+
+https://speeding-spaceship-303053.postman.co/workspace/SARA~4d3ae631-8c72-4ba7-8ec8-94cd10a4c06b/collection/30531723-a206ee2d-544d-4d84-869d-4bb9b0725753?action=share&creator=30531723
+
+
 
 <img width="853" alt="1" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda./assets/146086114/0401057c-44b4-492c-bd7a-e7781689547b">
 
-<img width="860" alt="2" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda./assets/146086114/9ba8401b-20d2-47d8-bf99-06db76671229">
 
-
-<img width="845" alt="3" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda./assets/146086114/36820ed0-9666-4c0c-b402-4c59a3f08e83">
 
 #Trello:
 https://trello.com/b/xC56Ktoy/pos
