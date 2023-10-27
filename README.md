@@ -23,9 +23,13 @@ MySQL
 
 
 ## PostMan 
-<img width="853" alt="1" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda/assets/146086114/80200d65-6b1c-4b6c-95cb-331efaad5c98">
-<img width="860" alt="2" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda/assets/146086114/4cf5d6b5-f094-4524-8d54-bc39cafdc9ae">
-<img width="845" alt="3" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda/assets/146086114/b2cd198e-908d-437d-aa45-28e8f85287fd">
+
+<img width="853" alt="1" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda./assets/146086114/0401057c-44b4-492c-bd7a-e7781689547b">
+
+<img width="860" alt="2" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda./assets/146086114/9ba8401b-20d2-47d8-bf99-06db76671229">
+
+
+<img width="845" alt="3" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda./assets/146086114/36820ed0-9666-4c0c-b402-4c59a3f08e83">
 
 #Trello:
 https://trello.com/b/xC56Ktoy/pos
