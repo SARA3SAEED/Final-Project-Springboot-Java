@@ -46,9 +46,9 @@ public class ProductController {
         }
     }
 
-
     @PutMapping("/products/{barcode}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Integer barcode, @RequestBody AddProductReqDTO dto) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer barcode,
+                                                 @RequestBody AddProductReqDTO dto) {
         try {
             Product updatedProduct = productService.updateProduct(barcode, dto);
             if (updatedProduct != null) {

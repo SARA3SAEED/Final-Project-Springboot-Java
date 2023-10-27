@@ -15,4 +15,6 @@ import java.util.List;
 public class OrderDetailsRespDTO {
     private List<OrderDetails> orderDetails;
     private Double total;
+    private Integer qty;
+    private Integer price;
 }

@@ -1,6 +1,9 @@
 package com.PointOfSales.POS.Controller;
 
+import com.PointOfSales.POS.DTO.AddProductReqDTO;
+import com.PointOfSales.POS.DTO.OrderDetailsRequest;
 import com.PointOfSales.POS.DTO.OrderDetailsRespDTO;
+import com.PointOfSales.POS.Entity.OrderDetails;
 import com.PointOfSales.POS.Service.Impl.OrderDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +41,21 @@ public class OrderDetailsController {
             return new ResponseEntity<>("Error deleting OrderDetails", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/update/{orderDetailsId}")
+    public ResponseEntity<OrderDetails> updateOrderDetails(@PathVariable Integer orderDetailsId,
+                                                           @RequestBody OrderDetailsRespDTO dto) {
+        try {
+            OrderDetails updatedOrderDetails = orderDetailsService.updateOrderDetails(orderDetailsId, dto);
+            if (updatedOrderDetails != null) {
+                return new ResponseEntity<>(updatedOrderDetails, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate HTTP status code
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

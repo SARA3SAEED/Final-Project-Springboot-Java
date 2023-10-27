@@ -12,6 +12,6 @@ public class OrderDetailsRequest {
 
     private Integer orderId;
     private Integer productId;
-    private Integer quantity;
+    private Integer qty;
     private Integer price;
 }

@@ -1,5 +1,7 @@
 package com.PointOfSales.POS.Service.Impl;
 
+import com.PointOfSales.POS.DTO.AddProductReqDTO;
+import com.PointOfSales.POS.DTO.OrderDetailsRequest;
 import com.PointOfSales.POS.DTO.OrderDetailsRespDTO;
 import com.PointOfSales.POS.Entity.Order;
 import com.PointOfSales.POS.Entity.OrderDetails;
@@ -81,14 +83,64 @@ public class OrderDetailsServiceImpl {
         }
     }
 
-
-        private void updateOrderTotal(String orderNo) {
-            double finalTotal = calOrderTotal(orderNo);
-            Order order = orderRepo.findByOrderno(orderNo).orElse(null);
-            if (order != null) {
-                order.setTotal(finalTotal);
-                orderRepo.save(order);  // Save the updated Order
-            }
+    // for delete method
+    private void updateOrderTotal(String orderNo) {
+        double finalTotal = calOrderTotal(orderNo);
+        Order order = orderRepo.findByOrderno(orderNo).orElse(null);
+        if (order != null) {
+            order.setTotal(finalTotal);
+            orderRepo.save(order);  // Save the updated Order
         }
     }
+
+    public OrderDetails updateOrderDetails(Integer orderDetailsId, OrderDetailsRespDTO dto) {
+        try {
+            Optional<OrderDetails> orderDetailsOptional = orderDetailsRepo.findById(orderDetailsId);
+            if (orderDetailsOptional.isPresent()) {
+                OrderDetails existingOrderDetails = orderDetailsOptional.get();
+
+                // Keep the original total for comparison
+                double originalTotal = existingOrderDetails.getTotal();
+
+                // Update order detail fields based on the DTO
+                if (dto.getPrice() != null) {
+                    existingOrderDetails.setPrice(Double.valueOf(dto.getPrice()));
+                }
+                if (dto.getQty() != null) {
+                    existingOrderDetails.setQty(dto.getQty());
+                }
+                // Recalculate the total for the order detail based on the updated fields
+                existingOrderDetails.setTotal(existingOrderDetails.getPrice() * existingOrderDetails.getQty());
+
+                OrderDetails updatedOrderDetails = orderDetailsRepo.save(existingOrderDetails);
+
+                // Recalculate the total for all order details related to the same order
+                double newTotal = calculateOrderDetailsTotal(updatedOrderDetails.getOrderNo());
+
+                // If the total has changed, update the Order entity
+                if (originalTotal != newTotal) {
+                    updateOrderTotal(updatedOrderDetails.getOrderNo());
+                }
+
+                return updatedOrderDetails;
+            } else {
+                // OrderDetails not found
+                return null;
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return null;
+        }
+    }
+
+
+    // for update method
+    private double calculateOrderDetailsTotal(String orderNo) {
+        return orderDetailsRepo.findAllByOrderNo(orderNo)
+                .stream()
+                .mapToDouble(OrderDetails::getTotal)
+                .sum();
+    }
+}
+
 
