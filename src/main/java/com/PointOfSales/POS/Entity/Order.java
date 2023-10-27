@@ -21,6 +21,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Integer order_id;
+    @Column(name = "order_no" , unique = true)
     private String orderno;
     private Double total;
 
