@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,4 +64,31 @@ public class OrderDetailsServiceImpl {
     }
 
 
-}
+    public String deleteOrderDetails(Integer orderDetailsId) {
+        try {
+            Optional<OrderDetails> orderDetailsOptional = orderDetailsRepo.findById(orderDetailsId);
+            if (orderDetailsOptional.isPresent()) {
+                OrderDetails orderDetails = orderDetailsOptional.get();
+                orderDetailsRepo.delete(orderDetails);
+                updateOrderTotal(orderDetails.getOrderNo());
+                return "OrderDetails deleted successfully";
+            } else {
+                return "OrderDetails not found";
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return "Error deleting OrderDetails";
+        }
+    }
+
+
+        private void updateOrderTotal(String orderNo) {
+            double finalTotal = calOrderTotal(orderNo);
+            Order order = orderRepo.findByOrderno(orderNo).orElse(null);
+            if (order != null) {
+                order.setTotal(finalTotal);
+                orderRepo.save(order);  // Save the updated Order
+            }
+        }
+    }
+

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,21 @@ public class ProductServiceImpl {
         }
 
         return savedProduct;
+    }
+
+    public String deleteProduct(Integer barcode) {
+        try {
+            Optional<Product> productOptional = productRepo.findByBarcod(barcode);
+            if (productOptional.isPresent()) {
+                Product product = productOptional.get();
+                productRepo.delete(product);
+                return "Product deleted successfully";
+            } else {
+                return "Product not found";
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return "Error deleting product";
+        }
     }
 }
