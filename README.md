@@ -7,7 +7,8 @@ The Point of Sale (POS) System is a comprehensive solution for managing sales tr
 ## Class Diagram
 
 
-<img width="638" alt="class daigram" src="https://github.com/SARA3SAEED/java-project1-github-repo-sda/assets/146086114/8683ebcb-361a-472f-be07-756ecb8eb36a">
+"C:\SDA - IRONHACK\Back-end\معسكر همه\W\Project1 -postman\class daigram.png"
+
 
 
 ## Technologies Used
