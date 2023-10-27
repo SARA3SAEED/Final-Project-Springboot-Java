@@ -38,7 +38,7 @@ public class OrderDetails{
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "barcod")
+    @JoinColumn(name = "product_id")
     @JsonIgnore
     private Product product;
 

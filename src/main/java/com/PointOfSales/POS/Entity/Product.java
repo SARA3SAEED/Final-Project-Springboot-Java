@@ -23,7 +23,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Integer product_id;
-    @Column(name = "barcod")
+    @Column(name = "barcod", unique = true)
     private Integer barcod;
     private String product_name;
     private String description;

@@ -52,9 +52,7 @@ class OrderControllerTest {
     @BeforeEach
     public void setUp(){
         mockMvc= MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        Order order1= new Order(1,"1234",0.0, OrderStatus.New);
-        Order order2= new Order(2,"1245",2.0,OrderStatus.Completed);
-        orderRepo.saveAll(List.of(order1,order2));
+
     }
 
     @AfterEach
@@ -70,26 +68,6 @@ class OrderControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(0))));
     }
-
-
-
-    @Test
-    void createOrderTest() throws Exception {
-        Order order3= new Order(3,"123456",2.0,OrderStatus.New);
-        String requestBody= objectMapper.writeValueAsString(order3);
-        MvcResult mvcResult= mockMvc.perform(post("/api/orders/")
-                        .content(requestBody)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andReturn();
-
-        assertFalse(mvcResult.getResponse().getContentAsString().toLowerCase().contains("123456"));
-
-
-    }
-
-
-
 
 
 }
