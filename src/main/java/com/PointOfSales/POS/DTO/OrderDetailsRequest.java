@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class OrderDetailsRequest {
 
-    private Integer orderId;
-    private Integer productId;
+    private Double total;
     private Integer qty;
     private Integer price;
+    private Integer barcod;
+    private String orderno;
 }

@@ -58,4 +58,15 @@ public class OrderDetailsController {
         }
     }
 
+
+    @PostMapping("/add")
+    public ResponseEntity<OrderDetailsRespDTO> addOrderDetails(@RequestBody OrderDetailsRequest dto) {
+        try {
+            OrderDetailsRespDTO response = orderDetailsService.addOrderDetails(dto);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate HTTP status code
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,6 +141,46 @@ public class OrderDetailsServiceImpl {
                 .stream()
                 .mapToDouble(OrderDetails::getTotal)
                 .sum();
+    }
+
+
+
+    public OrderDetailsRespDTO addOrderDetails(OrderDetailsRequest dto) {
+        try {
+            Product product = productService.getByBarcode(dto.getBarcod());
+
+            if (product != null) {
+                double total = product.getPrice() * dto.getQty();
+
+                OrderDetails orderDetails = OrderDetails.builder()
+                        .price(product.getPrice())
+                        .qty(dto.getQty())
+                        .total(total)
+                        .productName(product.getProduct_name())
+                        .barcode(product.getBarcod())
+                        .orderNo(dto.getOrderno())
+                        .build();
+
+                orderDetailsRepo.save(orderDetails);
+
+                // Recalculate the total for all order details related to the same order
+                double finalTotal = calculateOrderDetailsTotal(dto.getOrderno());
+
+                // Update the Order entity with the new total
+                updateOrderTotal(dto.getOrderno());
+
+                return OrderDetailsRespDTO.builder()
+                        .orderDetails(Collections.singletonList(orderDetails))
+                        .total(finalTotal)
+                        .build();
+            } else {
+                // Handle the case where the product is not found
+                return null;
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return null;
+        }
     }
 }
 

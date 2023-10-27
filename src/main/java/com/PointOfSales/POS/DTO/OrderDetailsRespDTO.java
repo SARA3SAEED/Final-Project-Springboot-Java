@@ -17,4 +17,6 @@ public class OrderDetailsRespDTO {
     private Double total;
     private Integer qty;
     private Integer price;
+    private Integer barcod;
+    private String orderno;
 }
