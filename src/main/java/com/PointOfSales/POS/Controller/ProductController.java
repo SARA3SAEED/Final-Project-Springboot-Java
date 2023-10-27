@@ -45,4 +45,35 @@ public class ProductController {
             return new ResponseEntity<>("Error deleting product", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    @PutMapping("/products/{barcode}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer barcode, @RequestBody AddProductReqDTO dto) {
+        try {
+            Product updatedProduct = productService.updateProduct(barcode, dto);
+            if (updatedProduct != null) {
+                return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate HTTP status code
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PatchMapping("/products/{barcode}")
+    public ResponseEntity<Product> patchProduct(@PathVariable Integer barcode, @RequestBody AddProductReqDTO dto) {
+        try {
+            Product updatedProduct = productService.patchProduct(barcode, dto);
+            if (updatedProduct != null) {
+                return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate HTTP status code
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -49,7 +49,6 @@ public class ProductServiceImpl {
         Product savedProduct = null;
 
 
-
         if (dto.getType().equals(ProductType.PHYSICAL)) {
             savedProduct = this.physicalProductRepo.save(product);
         } else if (dto.getType().equals(ProductType.DIGITAL)) {
@@ -74,4 +73,84 @@ public class ProductServiceImpl {
             return "Error deleting product";
         }
     }
+
+
+    public Product updateProduct(Integer barcode, AddProductReqDTO dto) {
+        try {
+            Optional<Product> productOptional = productRepo.findByBarcod(barcode);
+            if (productOptional.isPresent()) {
+                Product existingProduct = productOptional.get();
+
+                // Update shared data
+                existingProduct.setProduct_name(dto.getProduct_name());
+                existingProduct.setPrice(dto.getPrice());
+                existingProduct.setDescription(dto.getDescription());
+
+                // Update type-specific data
+                if (existingProduct instanceof PhysicalProduct && dto.getType().equals(ProductType.PHYSICAL)) {
+                    PhysicalProduct physicalProduct = (PhysicalProduct) existingProduct;
+                    physicalProduct.setWeight(dto.getWeight());
+                    physicalProduct.setHeight(dto.getHeight());
+                    return physicalProductRepo.save(physicalProduct);
+                } else if (existingProduct instanceof DigitalProduct && dto.getType().equals(ProductType.DIGITAL)) {
+                    DigitalProduct digitalProduct = (DigitalProduct) existingProduct;
+                    digitalProduct.setSerialNo(dto.getSerialNo());
+                    digitalProduct.setProvider(dto.getProvider());
+                    return digitalProductRepo.save(digitalProduct);
+                } else {
+                    // Product type mismatch
+                    return null;
+                }
+            } else {
+                // Product not found
+                return null;
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return null;
+        }
+    }
+
+    public Product patchProduct(Integer barcode, AddProductReqDTO dto) {
+        try {
+            Optional<Product> productOptional = productRepo.findByBarcod(barcode);
+            if (productOptional.isPresent()) {
+                Product existingProduct = productOptional.get();
+
+                // Patch shared data
+                if (dto.getProduct_name() != null) {
+                    existingProduct.setProduct_name(dto.getProduct_name());
+                }
+                if (dto.getPrice() != null) {
+                    existingProduct.setPrice(dto.getPrice());
+                }
+                if (dto.getDescription() != null) {
+                    existingProduct.setDescription(dto.getDescription());
+                }
+
+                // Patch type-specific data
+                if (existingProduct instanceof PhysicalProduct && dto.getWeight() != null && dto.getHeight() != null) {
+                    PhysicalProduct physicalProduct = (PhysicalProduct) existingProduct;
+                    physicalProduct.setWeight(dto.getWeight());
+                    physicalProduct.setHeight(dto.getHeight());
+                    return physicalProductRepo.save(physicalProduct);
+                } else if (existingProduct instanceof DigitalProduct && dto.getSerialNo() != null && dto.getProvider() != null) {
+                    DigitalProduct digitalProduct = (DigitalProduct) existingProduct;
+                    digitalProduct.setSerialNo(dto.getSerialNo());
+                    digitalProduct.setProvider(dto.getProvider());
+                    return digitalProductRepo.save(digitalProduct);
+                } else {
+                    // Product type mismatch or no specific fields to update
+                    return productRepo.save(existingProduct);
+                }
+            } else {
+                // Product not found
+                return null;
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return null;
+        }
+    }
+
 }
