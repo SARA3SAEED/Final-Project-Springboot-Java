@@ -1,9 +1,11 @@
 package com.PointOfSales.POS.Service.Impl;
 
 import com.PointOfSales.POS.DTO.OrderDetailsRespDTO;
+import com.PointOfSales.POS.Entity.Order;
 import com.PointOfSales.POS.Entity.OrderDetails;
 import com.PointOfSales.POS.Entity.Product;
 import com.PointOfSales.POS.Repository.OrderDetailsRepo;
+import com.PointOfSales.POS.Repository.OrderRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,13 @@ public class OrderDetailsServiceImpl {
 
     private final OrderDetailsRepo orderDetailsRepo;
     private final ProductServiceImpl productService;
+    private final OrderRepo orderRepo;
+
 
     public OrderDetailsRespDTO calculateTotal(Integer barcode, Integer qty, String orderNo) {
         Product product = this.productService.getByBarcode(barcode);
         double total = product.getPrice() * qty;
+
         OrderDetails orderDetails = OrderDetails.builder()
                 .price(product.getPrice())
                 .qty(qty)
@@ -29,6 +34,7 @@ public class OrderDetailsServiceImpl {
                 .barcode(product.getBarcod())
                 .orderNo(orderNo)
                 .build();
+
         this.orderDetailsRepo.save(orderDetails);
         List<OrderDetails> orderDetailsList = this.orderDetailsRepo.findAllByOrderNo(orderNo);
 
@@ -36,6 +42,12 @@ public class OrderDetailsServiceImpl {
                 .stream()
                 .mapToDouble(OrderDetails::getTotal)
                 .sum();
+
+        Order order = orderRepo.findByOrderno(orderNo).orElse(null);
+        if (order != null) {
+            order.setTotal(finalTotal);
+            orderRepo.save(order);  // Save the updated Order
+        }
 
         return OrderDetailsRespDTO.builder()
                 .orderDetails(orderDetailsList)

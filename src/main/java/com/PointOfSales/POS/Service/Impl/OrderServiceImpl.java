@@ -33,19 +33,14 @@ public class OrderServiceImpl {
     }
 
 
-    public void deleteOrder(Integer orderId) {
-        orderRepo.deleteById(orderId);
-    }
-
-
     public Order completeOrder(String orderNo, PaymentMethods paymentMethod) {
         Optional<Order> byOrderno = this.orderRepo.findByOrderno(orderNo);
         Double total = this.orderDetailsService.calOrderTotal(orderNo);
         PaymentFees payment = null;
         if (paymentMethod == PaymentMethods.CASH) {
-             payment = new CashPayment();
+            payment = new CashPayment();
         } else if (paymentMethod == PaymentMethods.CREDIT_CARD) {
-             payment = new CreditCardPayment();
+            payment = new CreditCardPayment();
         }
         double totalWithFees = payment.calTotalWithFees(total, paymentMethod);
 
@@ -53,4 +48,22 @@ public class OrderServiceImpl {
         byOrderno.get().setTotal(totalWithFees);
         return this.orderRepo.save(byOrderno.get());
     }
+
+
+    public String deleteOrder(Integer Id) {
+        try {
+            Optional<Order> orderOptional = orderRepo.findById(Id);
+            if (orderOptional.isPresent()) {
+                Order order = orderOptional.get();
+                orderRepo.delete(order);
+                return "Order deleted successfully";
+            } else {
+                return "Order not found";
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return "Error deleting order";
+        }
+    }
+
 }

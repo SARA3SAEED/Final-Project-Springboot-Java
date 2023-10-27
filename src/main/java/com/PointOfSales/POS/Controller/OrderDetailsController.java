@@ -14,7 +14,9 @@ public class OrderDetailsController {
     private final OrderDetailsServiceImpl orderDetailsService;
 
     @GetMapping("/add-to-cart/barcode/{barcode}/qty/{qty}/orderNo/{orderNo}")
-    public OrderDetailsRespDTO addToCart(@PathVariable("barcode") Integer barcode, @PathVariable("orderNo") String orderNo, @PathVariable("qty") int qty) {
+    public OrderDetailsRespDTO addToCart(@PathVariable("barcode") Integer barcode,
+                                         @PathVariable("orderNo") String orderNo,
+                                         @PathVariable("qty") int qty) {
         return this.orderDetailsService.calculateTotal(barcode, qty, orderNo);
     }
 

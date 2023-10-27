@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -28,9 +29,9 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/orders/{orderId}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Integer orderId) {
-        Order order = orderService.getOrderById(orderId);
+    @GetMapping("/orders/{Id}")
+    public ResponseEntity<Order> getOrderById(@PathVariable Integer Id) {
+        Order order = orderService.getOrderById(Id);
         if (order != null) {
             return new ResponseEntity<>(order, HttpStatus.OK);
         } else {
@@ -66,42 +67,16 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/orders/{orderId}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Integer orderId, @RequestBody Order updatedOrder) {
-        try {
-            Order existingOrder = orderService.getOrderById(orderId);
+    @DeleteMapping("/orders/delete/{Id}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Integer Id) {
+        String deletionResult = orderService.deleteOrder(Id);
 
-            if (existingOrder != null) {
-
-                existingOrder.setTotal(updatedOrder.getTotal());
-                existingOrder.setOrderStatus(updatedOrder.getOrderStatus());
-                //   existingOrder.setOrderDetails(updatedOrder.getOrderDetails());
-
-
-                Order savedOrder = orderService.saveOrder(existingOrder);
-                return new ResponseEntity<>(savedOrder, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/orders/{orderId}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Integer orderId) {
-        try {
-            Order existingOrder = orderService.getOrderById(orderId);
-
-            if (existingOrder != null) {
-                orderService.deleteOrder(orderId);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (deletionResult.startsWith("Order deleted")) {
+            return new ResponseEntity<>(deletionResult, HttpStatus.OK);
+        } else if (deletionResult.equals("Order not found")) {
+            return new ResponseEntity<>(deletionResult, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(deletionResult, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -8,4 +8,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepo extends JpaRepository<Order,Integer> {
     Optional<Order> findByOrderno(String orderNo);
+
+    boolean deleteOrderById(Integer Id);
+
 }
