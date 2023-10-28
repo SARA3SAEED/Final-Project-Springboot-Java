@@ -85,7 +85,7 @@ public class OrderDetailsServiceImpl {
     }
 
     // for delete method
-    private void updateOrderTotal(String orderNo) {
+    void updateOrderTotal(String orderNo) {
         double finalTotal = calOrderTotal(orderNo);
         Order order = orderRepo.findByOrderno(orderNo).orElse(null);
         if (order != null) {
@@ -175,6 +175,33 @@ public class OrderDetailsServiceImpl {
                         .build();
             } else {
                 // Handle the case where the product is not found
+                return null;
+            }
+        } catch (Exception e) {
+            // Handle exceptions (e.g., database errors) as needed
+            return null;
+        }
+    }
+
+    public OrderDetails updateOrderDetailss(Integer orderDetailsId, OrderDetailsRespDTO dto) {
+        try {
+            Optional<OrderDetails> orderDetailsOptional = orderDetailsRepo.findById(orderDetailsId);
+            if (orderDetailsOptional.isPresent()) {
+                OrderDetails existingOrderDetails = orderDetailsOptional.get();
+
+                // Update order details fields based on the DTO
+                if (dto.getPrice() != null) {
+                    existingOrderDetails.setPrice(Double.valueOf(dto.getPrice()));
+                }
+                if (dto.getQty() != null) {
+                    existingOrderDetails.setQty(dto.getQty());
+                }
+                // Add other fields as needed
+
+                OrderDetails updatedOrderDetails = orderDetailsRepo.save(existingOrderDetails);
+                return updatedOrderDetails;
+            } else {
+                // Order details not found
                 return null;
             }
         } catch (Exception e) {

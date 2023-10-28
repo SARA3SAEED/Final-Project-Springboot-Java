@@ -69,4 +69,24 @@ public class OrderDetailsController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    @PatchMapping("/update/{orderDetailsId}")
+    public ResponseEntity<OrderDetails> updateOrderDetailss(
+            @PathVariable Integer orderDetailsId,
+            @RequestBody OrderDetailsRespDTO dto) {
+        try {
+            OrderDetails updatedOrderDetails = orderDetailsService.updateOrderDetails(orderDetailsId, dto);
+            if (updatedOrderDetails != null) {
+                return new ResponseEntity<>(updatedOrderDetails, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate HTTP status code
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }

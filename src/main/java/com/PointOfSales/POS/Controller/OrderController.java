@@ -1,6 +1,7 @@
 package com.PointOfSales.POS.Controller;
 
 import com.PointOfSales.POS.DTO.OrderDetailsRespDTO;
+import com.PointOfSales.POS.DTO.UpdateOrderReqDTO;
 import com.PointOfSales.POS.Entity.Order;
 import com.PointOfSales.POS.Entity.OrderStatus;
 import com.PointOfSales.POS.Repository.OrderRepo;
@@ -80,4 +81,24 @@ public class OrderController {
         }
     }
 
+
+
+
+
+
+
+    @PutMapping("/orders/update/{orderId}")
+    public ResponseEntity<Order> updateOrder(@PathVariable Integer orderId, @RequestBody UpdateOrderReqDTO dto) {
+        try {
+            Order updatedOrder = orderService.updateOrder(orderId, dto);
+            if (updatedOrder != null) {
+                return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate HTTP status code
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
