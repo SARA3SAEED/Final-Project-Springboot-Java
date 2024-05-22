@@ -1,4 +1,3 @@
-# java-project1-github-repo-sda.
 
 # Point of Sale (POS) System
 Description
